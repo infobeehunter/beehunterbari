@@ -3,135 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BeeHunter Bari - Ultimate SuperApp</title>
+    <title>BeeHunter Bari</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .page { display: none; padding-bottom: 100px; }
+        .page { display: none; }
         .page.active { display: block !important; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
         .nav-active { color: #EAB308 !important; font-weight: 800; }
-        #side-menu { transition: transform 0.3s ease-in-out; transform: translateX(-100%); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        #side-menu { transition: 0.3s; transform: translateX(-100%); }
         #side-menu.open { transform: translateX(0); }
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
         .overlay.active { display: block; }
-        .bg-gold { background: #EAB308; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900 font-sans overflow-x-hidden">
+<body class="bg-gray-50 text-slate-900 pb-32">
 
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
     <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-white z-50 shadow-2xl p-6">
-        <h2 class="font-black italic text-xl mb-8">BEEHUNTER 🐝</h2>
-        <nav class="space-y-6 font-black uppercase text-sm">
-            <div onclick="nav('home'); toggleMenu()" class="cursor-pointer">🏠 Home</div>
-            <div onclick="nav('partners'); toggleMenu()" class="cursor-pointer">🤝 Partner & Shop</div>
-            <div onclick="nav('pass-store'); toggleMenu()" class="cursor-pointer">🎟️ Acquista Pass</div>
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="font-black italic text-xl uppercase">BeeHunter 🐝</h2>
+            <button onclick="toggleMenu()">✕</button>
+        </div>
+        <nav class="space-y-6 font-bold uppercase text-xs">
+            <div onclick="nav('partners'); toggleMenu()" class="cursor-pointer">🤝 Partner & Premi</div>
+            <div onclick="nav('pass-shop'); toggleMenu()" class="cursor-pointer">🎟️ Acquista Pass</div>
             <div onclick="nav('my-passes'); toggleMenu()" class="cursor-pointer">🎒 I Miei Pass</div>
-            <div onclick="nav('transport'); toggleMenu()" class="cursor-pointer">🚌 Bus & Percorsi</div>
+            <div onclick="nav('bus-page'); toggleMenu()" class="cursor-pointer">🚌 Pullman & Percorsi</div>
             <div onclick="nav('info'); toggleMenu()" class="cursor-pointer">🆘 Info & Emergenze</div>
         </nav>
     </div>
 
     <header class="bg-white p-5 sticky top-0 z-30 shadow-sm flex justify-between items-center">
         <button onclick="toggleMenu()" class="text-2xl">☰</button>
-        <div class="text-center">
-            <span id="user-points" class="text-xl font-black text-yellow-400">150</span>
-            <p class="text-[8px] font-black uppercase text-gray-400">Punti</p>
+        <div class="text-right">
+            <p class="text-[10px] font-bold text-gray-400 uppercase leading-none">Punti Hunter</p>
+            <span id="user-points" class="text-2xl font-black text-yellow-400 leading-none">150</span>
         </div>
-        <select onchange="changeLang(this.value)" class="text-[10px] font-bold bg-gray-100 p-1 rounded">
-            <option value="it">IT</option><option value="en">EN</option>
-        </select>
     </header>
 
     <main id="home" class="page active p-5 space-y-6">
-        <div class="bg-gold p-6 rounded-[35px] text-white shadow-lg">
-            <h2 class="text-2xl font-black italic uppercase leading-none">Bari Hunter</h2>
-            <p class="text-xs mt-2 opacity-90">Esplora, scansiona e risparmia.</p>
+        <div class="bg-yellow-400 p-6 rounded-[40px] text-white shadow-lg">
+            <h2 class="text-2xl font-black italic uppercase">Bentornato Hunter!</h2>
+            <p class="text-xs font-bold opacity-80 mt-1">Trova le sfide sulla mappa per accumulare punti.</p>
         </div>
-        <h3 class="font-black uppercase text-sm">Eventi in corso</h3>
-        <div id="events-container" class="space-y-3"></div>
+        
+        <h3 class="font-black uppercase text-sm">Eventi Live</h3>
+        <div id="events-list" class="space-y-4">
+            <div class="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex justify-between items-center">
+                <div><p class="font-black text-xs uppercase">Sagra del Panzerotto</p><p class="text-[10px] text-gray-400 italic">Piazza Ferrarese • 19:30</p></div>
+                <span class="text-xl">🍕</span>
+            </div>
+        </div>
     </main>
 
     <main id="map" class="page p-5 space-y-4">
-        <h2 class="text-xl font-black uppercase">Mappa Esplorazione</h2>
-        <div class="w-full h-80 bg-slate-200 rounded-[35px] shadow-inner relative overflow-hidden">
-            <div class="absolute inset-0 flex items-center justify-center">
-                <p class="text-[10px] font-bold text-gray-400">MAPPA GPS INTERATTIVA</p>
+        <h2 class="text-xl font-black italic uppercase">Mappa Sfide</h2>
+        <div class="w-full h-80 bg-blue-50 rounded-[40px] border-4 border-white shadow-lg overflow-hidden relative">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m12!1m3!1d3000!2d16.8719!3d41.1259!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sit!2sit!4v1" class="w-full h-full grayscale" style="border:0;"></iframe>
+        </div>
+        <div id="challenges-list" class="space-y-4">
+            <div class="bg-white p-5 rounded-[35px] shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-2"><span class="text-2xl">🏰</span><span class="text-green-500 font-black text-xs">+50 PT</span></div>
+                <h4 class="font-black uppercase text-sm italic">Il Simbolo Svevo</h4>
+                <p class="text-[10px] text-gray-400 font-bold uppercase mb-4">Trova il simbolo sulla facciata del Castello e scanziona.</p>
+                <button onclick="nav('camera')" class="w-full bg-slate-900 text-white py-3 rounded-2xl font-black text-[10px] uppercase">Vai alla Sfida</button>
             </div>
         </div>
-        <div id="challenges-list" class="space-y-4"></div>
     </main>
 
     <main id="camera" class="page p-5 text-center">
-        <h2 class="text-xl font-black uppercase mb-4">Scanner QR</h2>
-        <div class="w-full h-80 bg-black rounded-[40px] overflow-hidden relative border-4 border-white shadow-xl">
+        <h2 class="text-xl font-black italic uppercase mb-4">Scanner & Fotocamera</h2>
+        <div class="w-full h-80 bg-black rounded-[40px] border-4 border-white shadow-2xl overflow-hidden relative">
             <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
         </div>
         <div class="flex justify-center space-x-4 mt-6">
-            <button onclick="startCamera()" class="bg-gold text-white px-8 py-3 rounded-2xl font-black text-xs">ATTIVA</button>
-            <button onclick="takePhoto()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-xs">SCATTA DIARIO</button>
+            <button onclick="startCamera()" class="bg-yellow-400 text-white px-8 py-3 rounded-2xl font-black text-[10px] uppercase">Attiva</button>
+            <button onclick="takePhoto()" class="bg-slate-900 text-white px-8 py-3 rounded-2xl font-black text-[10px] uppercase">Scatta Foto Diario</button>
         </div>
     </main>
 
     <main id="profile" class="page p-5 space-y-6">
-        <h2 class="text-xl font-black uppercase">Mio Diario di Viaggio</h2>
-        <div id="diary-grid" class="grid grid-cols-2 gap-3"></div>
-        <h2 class="text-xl font-black uppercase pt-4">I Miei Badge</h2>
-        <div id="badge-grid" class="grid grid-cols-3 gap-3"></div>
+        <h2 class="text-xl font-black italic uppercase">Mio Diario</h2>
+        <div id="diary-grid" class="grid grid-cols-2 gap-3">
+            </div>
+        <h2 class="text-xl font-black italic uppercase pt-4">I Miei Badge</h2>
+        <div class="grid grid-cols-3 gap-4 text-center">
+            <div onclick="alert('Badge Pioniere: Hai visitato Bari Vecchia!')" class="cursor-pointer">
+                <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-1 text-3xl">🧭</div>
+                <p class="text-[9px] font-black uppercase">Pioniere</p>
+            </div>
+        </div>
     </main>
 
     <main id="partners" class="page p-5 space-y-4">
-        <h2 class="text-xl font-black uppercase">Partner Convenzionati</h2>
-        <div id="partners-list" class="space-y-4"></div>
-    </main>
-
-    <main id="pass-store" class="page p-5 space-y-4">
-        <h2 class="text-xl font-black uppercase">Acquista una Guida</h2>
-        <div id="pass-catalog" class="space-y-4"></div>
-    </main>
-
-    <main id="my-passes" class="page p-5 space-y-4">
-        <h2 class="text-xl font-black uppercase text-yellow-500">I Tuoi Itinerari</h2>
-        <div id="purchased-passes-list" class="space-y-4 text-center py-10 text-gray-400 font-bold uppercase text-xs">
-            Non hai ancora acquistato dei Pass.
+        <h2 class="text-xl font-black italic uppercase">Partner & Premi</h2>
+        <div id="partners-list" class="space-y-4">
+            <div onclick="openPartner('Fiore')" class="bg-white p-4 rounded-3xl shadow-sm flex items-center space-x-4">
+                <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl">🍕</div>
+                <div class="flex-1">
+                    <h4 class="font-black uppercase text-sm">Panificio Fiore</h4>
+                    <p class="text-[10px] text-gray-400 italic">Il tempio della focaccia barese.</p>
+                </div>
+            </div>
         </div>
     </main>
 
-    <main id="transport" class="page p-5 space-y-6">
-        <h2 class="text-xl font-black uppercase text-blue-600">Bus & Navigazione</h2>
-        <div class="bg-white p-5 rounded-3xl shadow-sm space-y-3">
-            <p class="text-[10px] font-black uppercase text-gray-400">Calcola Percorso Migliore</p>
-            <input type="text" id="bus-destination" placeholder="Dove vuoi andare? (es. Bari Vecchia)" class="w-full p-3 bg-gray-100 rounded-xl text-xs outline-none focus:ring-2 ring-blue-500">
-            <button onclick="findBusRoute()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-xs">TROVA PULLMAN</button>
+    <main id="pass-shop" class="page p-5 space-y-4">
+        <h2 class="text-xl font-black italic uppercase">Scegli la tua Guida</h2>
+        <div class="bg-white p-6 rounded-[35px] shadow-sm border border-gray-100">
+            <h3 class="font-black text-lg italic">LIGHT TOUR - €5</h3>
+            <p class="text-[10px] text-gray-500 my-2">Perfetto per una passeggiata veloce. 4 tappe fondamentali nel cuore di Bari Vecchia.</p>
+            <button onclick="buyPass('Light')" class="w-full bg-yellow-400 text-white py-3 rounded-2xl font-black text-xs uppercase mt-2">Acquista</button>
         </div>
-        <div id="bus-results" class="space-y-3"></div>
-        <h3 class="font-black uppercase text-xs">Tutti i Pullman disponibili</h3>
-        <div id="all-buses" class="grid grid-cols-4 gap-2"></div>
-    </main>
-
-    <main id="info" class="page p-5 space-y-4">
-        <h2 class="text-xl font-black uppercase">Assistenza</h2>
-        <div onclick="window.location.href='tel:118'" class="bg-red-50 p-5 rounded-3xl border border-red-100 flex justify-between items-center">
-            <span class="font-black text-red-600">EMERGENZA MEDICA</span><span class="text-xl">📞</span>
-        </div>
-        <div class="bg-white p-5 rounded-3xl shadow-sm flex justify-between items-center">
-            <span class="font-black uppercase text-xs">Farmacie di Turno</span><span class="text-xl">💊</span>
+        <div class="bg-white p-6 rounded-[35px] shadow-sm border border-gray-100">
+            <h3 class="font-black text-lg italic">DISCOVERY TOUR - €10</h3>
+            <p class="text-[10px] text-gray-500 my-2">7 tappe guidate. Approfondimenti storici su Castello, Teatri e Muraglia.</p>
+            <button onclick="buyPass('Discovery')" class="w-full bg-yellow-400 text-white py-3 rounded-2xl font-black text-xs uppercase mt-2">Acquista</button>
         </div>
     </main>
 
-    <main id="partner-detail" class="page p-0">
-        <div class="relative h-60">
-            <img id="p-img" src="" class="w-full h-full object-cover">
-            <button onclick="nav('partners')" class="absolute top-6 left-6 bg-white/80 px-4 py-2 rounded-2xl font-black text-[10px]">INDIETRO</button>
-        </div>
-        <div class="bg-white -mt-8 rounded-t-[40px] p-6 min-h-screen">
-            <h2 id="p-name" class="text-2xl font-black uppercase italic"></h2>
-            <div id="p-rewards" class="mt-6 space-y-3"></div>
+    <main id="my-passes" class="page p-5 space-y-6">
+        <h2 class="text-xl font-black italic uppercase">I Miei Itinerari</h2>
+        <div id="my-passes-list" class="text-center py-10 text-gray-400 uppercase font-bold text-[10px]">
+            Nessun pass acquistato.
         </div>
     </main>
 
-    <nav class="fixed bottom-0 w-full bg-white border-t p-3 flex justify-around items-center z-40 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+    <main id="bus-page" class="page p-5 space-y-6">
+        <h2 class="text-xl font-black italic uppercase text-blue-600">Bus & Navigazione</h2>
+        <div class="bg-white p-5 rounded-[30px] shadow-sm space-y-3">
+            <p class="text-[10px] font-black uppercase text-gray-400 italic">Dove vuoi andare?</p>
+            <input type="text" id="bus-dest" placeholder="Es: San Nicola o Pane e Pomodoro" class="w-full p-3 bg-gray-100 rounded-xl text-xs outline-none border-2 border-transparent focus:border-blue-400">
+            <button onclick="calcBus()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-black text-xs uppercase">Trova Percorso</button>
+        </div>
+        <div id="bus-res"></div>
+        <div class="grid grid-cols-4 gap-2">
+            <div class="bg-gray-100 p-2 rounded-lg text-center font-black text-[10px]">1</div>
+            <div class="bg-gray-100 p-2 rounded-lg text-center font-black text-[10px]">12/</div>
+            <div class="bg-gray-100 p-2 rounded-lg text-center font-black text-[10px]">22</div>
+            <div class="bg-gray-100 p-2 rounded-lg text-center font-black text-[10px]">53</div>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 w-full bg-white border-t p-3 flex justify-around items-center z-40 shadow-2xl">
         <button onclick="nav('home')" id="n-home" class="nav-active flex flex-col items-center">
             <span class="text-xl">🏠</span><span class="text-[8px] font-black uppercase mt-1">Home</span>
         </button>
@@ -148,34 +163,13 @@
 
     <script>
         let userPoints = 150;
+        let diary = [];
         let myPasses = [];
-        let diaryPhotos = [];
 
-        const db = {
-            partners: [
-                { id: '1', n: 'Panificio Fiore', img: 'https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=400', rew: [{t: 'Trancio Focaccia', c: 40, d: 'Focaccia barese calda.'}] },
-                { id: '2', n: 'Mastro Ciccio', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400', rew: [{t: 'Panino Omaggio', c: 100, d: 'Un panino gourmet a scelta.'}] }
-            ],
-            passes: [
-                { id: 'p1', n: 'Light Tour', price: 5, d: 'Ideale per chi ha poco tempo. Include 4 tappe fondamentali di Bari Vecchia.', meta: [
-                    { t: 'Basilica San Nicola', d: 'Centro del culto nicolaiano, capolavoro del romanico pugliese.', dist: '200m' },
-                    { t: 'Cattedrale San Sabino', d: 'Famosa per il rosone e la magia della luce solare il 21 giugno.', dist: '450m' }
-                ]},
-                { id: 'p2', n: 'Discovery Tour', price: 10, d: '7 tappe tra storia e cultura. Include la storia del Castello e dei teatri.', meta: [
-                    { t: 'Castello Svevo', d: 'Fortezza difensiva e dimora reale, oggi sede museale.', dist: '100m' },
-                    { t: 'Teatro Petruzzelli', d: 'Il quarto teatro più grande d’Italia, distrutto da un incendio e rinato.', dist: '800m' }
-                ]},
-                { id: 'p3', n: 'Full Bari Experience', price: 19, d: '3 giorni completi. Include itinerari, degustazioni e musei segreti.', meta: [
-                    { t: 'Bari Sotterranea', d: 'Viaggio nei secoli sotto il livello stradale attuale.', dist: '300m' },
-                    { t: 'Pinacoteca Metropolitana', d: 'Le migliori opere d’arte pugliese dal XV secolo a oggi.', dist: '1.2km' }
-                ]}
-            ],
-            buses: ['1','2','2/','3','4','6','12','12/','21','22','27','53','A','B','C'],
-            challenges: [
-                { n: 'Il Guardiano Svevo', p: 50, d: 'Trova il simbolo sulla facciata del castello.' },
-                { n: 'Arco delle Orecchiette', p: 30, d: 'Trova il QR tra le signore della pasta.' }
-            ]
-        };
+        function toggleMenu() {
+            document.getElementById('side-menu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('active');
+        }
 
         function nav(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -187,66 +181,36 @@
             window.scrollTo(0,0);
         }
 
-        function toggleMenu() {
-            document.getElementById('side-menu').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-
-        function renderAll() {
-            // Partners
-            document.getElementById('partners-list').innerHTML = db.partners.map(p => `
-                <div onclick="openPartner('${p.id}')" class="bg-white p-4 rounded-3xl shadow-sm flex items-center space-x-4">
-                    <img src="${p.img}" class="w-16 h-16 rounded-2xl object-cover">
-                    <div class="flex-1"><p class="font-black uppercase text-sm">${p.n}</p></div>
-                </div>
-            `).join('');
-
-            // Catalog Pass
-            document.getElementById('pass-catalog').innerHTML = db.passes.map(p => `
-                <div class="bg-white p-6 rounded-[35px] shadow-sm border-2 border-gray-50">
-                    <h3 class="font-black text-lg italic">${p.n}</h3>
-                    <p class="text-xs text-gray-500 mt-2 mb-4 italic">${p.d}</p>
-                    <button onclick="buyPass('${p.id}')" class="w-full bg-gold text-white py-4 rounded-2xl font-black text-xs shadow-lg">ACQUISTA € ${p.price}.00</button>
-                </div>
-            `).join('');
-
-            // All Buses
-            document.getElementById('all-buses').innerHTML = db.buses.map(b => `
-                <div class="bg-gray-100 p-2 rounded-lg text-center font-black text-[10px]">${b}</div>
-            `).join('');
-
-            // Challenges
-            document.getElementById('challenges-list').innerHTML = db.challenges.map(c => `
-                <div class="bg-white p-5 rounded-[35px] shadow-sm">
-                    <div class="flex justify-between items-center mb-2"><span class="text-xl">🏰</span><span class="text-green-600 font-black text-xs">+${c.p} PT</span></div>
-                    <p class="font-black uppercase text-sm">${c.n}</p>
-                    <p class="text-[10px] text-gray-400 italic">${c.d}</p>
-                </div>
-            `).join('');
-        }
-
-        function buyPass(id) {
-            const p = db.passes.find(x => x.id === id);
-            myPasses.push(p);
-            alert(`PASS ACQUISTATO: ${p.n}\nOra è nella sezione 'I Miei Pass'.`);
+        function buyPass(type) {
+            const passData = {
+                'Light': { n: 'Light Tour', mete: [
+                    { t: 'Basilica di San Nicola', d: 'Capolavoro del romanico, ospita le reliquie del Santo.', dist: '150m' },
+                    { t: 'Cattedrale di San Sabino', d: 'Esempio unico di architettura medievale pugliese.', dist: '400m' }
+                ]},
+                'Discovery': { n: 'Discovery Tour', mete: [
+                    { t: 'Castello Svevo', d: 'Antica fortezza normanna trasformata dagli Svevi.', dist: '100m' },
+                    { t: 'Teatro Petruzzelli', d: 'Simbolo culturale di Bari, uno dei teatri più belli d’Europa.', dist: '900m' }
+                ]}
+            };
+            myPasses.push(passData[type]);
+            alert('Hai acquistato il ' + type + ' Tour! Trovi le mete nella sezione "I Miei Pass".');
             renderMyPasses();
-            nav('my-passes');
         }
 
         function renderMyPasses() {
-            const container = document.getElementById('purchased-passes-list');
-            if(myPasses.length === 0) return;
-            container.innerHTML = myPasses.map(p => `
-                <div class="bg-white p-6 rounded-[35px] shadow-md border-t-8 border-gold text-left">
-                    <h3 class="font-black uppercase text-sm mb-4">${p.n} - Mete per te</h3>
-                    <div class="space-y-6">
-                        ${p.meta.map(m => `
+            const list = document.getElementById('my-passes-list');
+            list.className = "space-y-6 text-left";
+            list.innerHTML = myPasses.map(p => `
+                <div class="bg-white p-6 rounded-[35px] border-t-8 border-yellow-400 shadow-sm">
+                    <h3 class="font-black uppercase text-sm mb-4">${p.n} - Mete ordinate</h3>
+                    <div class="space-y-4">
+                        ${p.mete.map(m => `
                             <div class="border-l-4 border-gray-100 pl-4">
-                                <div class="flex justify-between">
+                                <div class="flex justify-between items-center">
                                     <p class="font-black text-xs uppercase">${m.t}</p>
-                                    <span class="text-[9px] bg-gray-100 px-2 py-1 rounded font-bold">A ${m.dist}</span>
+                                    <span class="text-[9px] bg-gray-100 px-2 py-1 rounded font-black">${m.dist}</span>
                                 </div>
-                                <p class="text-[10px] text-gray-500 mt-1 italic">${m.d}</p>
+                                <p class="text-[10px] text-gray-400 mt-1 italic">${m.d}</p>
                             </div>
                         `).join('')}
                     </div>
@@ -254,40 +218,15 @@
             `).join('');
         }
 
-        function findBusRoute() {
-            const dest = document.getElementById('bus-destination').value;
-            if(!dest) return alert("Scrivi una meta!");
-            const res = document.getElementById('bus-results');
-            res.innerHTML = `
-                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 animate-pulse">
-                    <p class="text-[10px] font-black text-blue-600 uppercase">Percorso Migliore per ${dest}</p>
-                    <p class="text-xs font-bold mt-2 italic">Prendi la linea 12/ da Via Melo verso il Castello. Prossimo bus tra 4 min.</p>
+        function calcBus() {
+            const dest = document.getElementById('bus-dest').value;
+            if(!dest) return alert("Inserisci una destinazione!");
+            document.getElementById('bus-res').innerHTML = `
+                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 italic text-xs">
+                    <p class="font-black text-blue-600 uppercase mb-1">Miglior Percorso per ${dest}:</p>
+                    Prendi la linea 12/ da Piazza Moro. Fermata ogni 10 minuti. Arrivo previsto in 8 minuti.
                 </div>
             `;
-        }
-
-        function openPartner(id) {
-            const p = db.partners.find(x => x.id === id);
-            document.getElementById('p-name').innerText = p.n;
-            document.getElementById('p-img').src = p.img;
-            document.getElementById('p-rewards').innerHTML = p.rew.map(r => `
-                <div class="bg-yellow-50 p-4 rounded-3xl border border-yellow-100 flex justify-between items-center">
-                    <div>
-                        <p class="font-black uppercase text-xs">${r.t}</p>
-                        <p class="text-[9px] text-yellow-600 italic" onclick="alert('${r.d}')">Descrizione premio ℹ️</p>
-                    </div>
-                    <button onclick="redeem(${r.c})" class="bg-gold text-white px-4 py-2 rounded-xl text-[10px] font-black">${r.c} PT</button>
-                </div>
-            `).join('');
-            nav('partner-detail');
-        }
-
-        function redeem(cost) {
-            if(userPoints >= cost) {
-                userPoints -= cost;
-                document.getElementById('user-points').innerText = userPoints;
-                alert("Codice Premio: BEE-99X\nMostralo alla cassa!");
-            } else alert("Punti insufficienti!");
         }
 
         let stream = null;
@@ -295,28 +234,28 @@
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
                 document.getElementById('video').srcObject = stream;
-            } catch (err) { alert("Attiva i permessi!"); }
+            } catch (err) { alert("Permessi negati."); }
         }
         function stopCamera() { if(stream) { stream.getTracks().forEach(t => t.stop()); stream = null; } }
 
         function takePhoto() {
             const video = document.getElementById('video');
-            if(!stream) return alert("Attiva la fotocamera!");
+            if(!stream) return alert("Attiva prima la camera!");
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth; canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            diaryPhotos.push(canvas.toDataURL('image/png'));
+            diary.push(canvas.toDataURL('image/png'));
             renderDiary();
-            alert("Salvata nel Diario!");
+            alert("Foto salvata!");
         }
 
         function renderDiary() {
-            document.getElementById('diary-grid').innerHTML = diaryPhotos.map(img => `
-                <img src="${img}" class="w-full h-32 object-cover rounded-2xl shadow-sm border-2 border-white">
+            document.getElementById('diary-grid').innerHTML = diary.map(img => `
+                <img src="${img}" class="w-full h-32 object-cover rounded-2xl border-2 border-white shadow-sm">
             `).join('');
         }
 
-        renderAll();
+        renderDiary();
     </script>
 </body>
 </html>
