@@ -1,8 +1,0 @@
-.page { display: none; }
-.page.active { display: block !important; }
-.nav-active { color: #EAB308 !important; font-weight: 800; }
-#side-menu { transition: 0.3s; transform: translateX(-100%); }
-#side-menu.open { transform: translateX(0); }
-.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
-.overlay.active { display: block; }
-* { -webkit-tap-highlight-color: transparent; outline: none; }
