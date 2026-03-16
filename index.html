@@ -12,38 +12,50 @@
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
     
     <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-white z-50 shadow-2xl p-6">
-        <h2 class="font-black italic text-xl mb-10">BEEHUNTER 🐝</h2>
-        <nav class="space-y-6 font-bold uppercase text-xs">
-            <div onclick="nav('partners'); toggleMenu()" class="cursor-pointer">🤝 Partner</div>
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="font-black italic text-xl uppercase">BeeHunter 🐝</h2>
+            <button onclick="toggleMenu()" class="text-2xl">✕</button>
+        </div>
+        <nav class="space-y-6 font-bold uppercase text-xs tracking-widest">
+            <div onclick="nav('partners'); toggleMenu()" class="cursor-pointer">🤝 Partner & Premi</div>
             <div onclick="nav('pass-shop'); toggleMenu()" class="cursor-pointer">🎟️ Acquista Pass</div>
             <div onclick="nav('my-passes'); toggleMenu()" class="cursor-pointer">🎒 I Miei Pass</div>
-            <div onclick="nav('bus-page'); toggleMenu()" class="cursor-pointer">🚌 Pullman</div>
+            <div onclick="nav('bus-page'); toggleMenu()" class="cursor-pointer">🚌 Bus & Percorsi</div>
+            <div onclick="nav('info'); toggleMenu()" class="cursor-pointer">🆘 Info Point</div>
         </nav>
     </div>
 
     <header class="bg-white p-5 sticky top-0 z-30 shadow-sm flex justify-between items-center">
         <button onclick="toggleMenu()" class="text-2xl">☰</button>
-        <span id="user-points" class="text-2xl font-black text-yellow-400">150</span>
+        <div class="text-right">
+            <p class="text-[9px] font-black text-gray-400 uppercase leading-none">Punti Hunter</p>
+            <span id="user-points" class="text-2xl font-black text-yellow-400">150</span>
+        </div>
     </header>
 
     <main id="home" class="page active p-5">
-        <div class="bg-yellow-400 p-6 rounded-[40px] text-white">
+        <div class="bg-yellow-400 p-6 rounded-[40px] text-white shadow-lg">
             <h2 class="text-2xl font-black italic uppercase">Bari Hunter</h2>
+            <p class="text-xs font-bold opacity-80">Esplora la città e accumula punti.</p>
         </div>
     </main>
 
     <main id="map" class="page p-5">
-        <div class="w-full h-80 bg-gray-200 rounded-[40px] flex items-center justify-center font-bold">MAPPA GPS</div>
+        <h2 class="text-xl font-black italic uppercase mb-4">Mappa Sfide</h2>
+        <div class="w-full h-80 bg-gray-200 rounded-[40px] flex items-center justify-center font-bold text-gray-400">MAPPA GPS 📡</div>
     </main>
 
     <main id="camera" class="page p-5 text-center">
+        <h2 class="text-xl font-black italic uppercase mb-4">Scanner & Foto</h2>
         <video id="video" class="w-full h-80 bg-black rounded-[40px] object-cover" autoplay playsinline></video>
-        <button onclick="startCamera()" class="mt-4 bg-yellow-400 p-4 rounded-2xl w-full font-bold">ATTIVA CAMERA</button>
-        <button onclick="takePhoto()" class="mt-2 bg-slate-900 text-white p-4 rounded-2xl w-full font-bold">SCATTA PER DIARIO</button>
+        <div class="flex flex-col space-y-3 mt-6">
+            <button onclick="startCamera()" class="bg-yellow-400 text-white py-4 rounded-2xl font-black text-xs uppercase">Attiva Camera</button>
+            <button onclick="takePhoto()" class="bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase">Scatta per Diario</button>
+        </div>
     </main>
 
     <main id="profile" class="page p-5">
-        <h2 class="font-black uppercase mb-4">Mio Diario</h2>
+        <h2 class="text-xl font-black italic uppercase mb-4">Mio Diario</h2>
         <div id="diary-grid" class="grid grid-cols-2 gap-2"></div>
     </main>
 
@@ -51,12 +63,21 @@
     <main id="pass-shop" class="page p-5"></main>
     <main id="my-passes" class="page p-5"></main>
     <main id="bus-page" class="page p-5"></main>
+    <main id="info" class="page p-5"></main>
 
     <nav class="fixed bottom-0 w-full bg-white border-t p-4 flex justify-around items-center z-40">
-        <button onclick="nav('home')" id="n-home" class="nav-active text-2xl">🏠</button>
-        <button onclick="nav('map')" id="n-map" class="text-gray-400 text-2xl">📍</button>
-        <button onclick="nav('camera')" id="n-camera" class="text-gray-400 text-2xl">📸</button>
-        <button onclick="nav('profile')" id="n-profile" class="text-gray-400 text-2xl">👤</button>
+        <button onclick="nav('home')" id="n-home" class="nav-active flex flex-col items-center">
+            <span class="text-2xl">🏠</span><span class="text-[9px] font-black uppercase mt-1">Home</span>
+        </button>
+        <button onclick="nav('map')" id="n-map" class="text-gray-400 flex flex-col items-center">
+            <span class="text-2xl">📍</span><span class="text-[9px] font-black uppercase mt-1">Mappa</span>
+        </button>
+        <button onclick="nav('camera')" id="n-camera" class="text-gray-400 flex flex-col items-center">
+            <span class="text-2xl">📸</span><span class="text-[9px] font-black uppercase mt-1">Scanner</span>
+        </button>
+        <button onclick="nav('profile')" id="n-profile" class="text-gray-400 flex flex-col items-center">
+            <span class="text-2xl">👤</span><span class="text-[9px] font-black uppercase mt-1">Io</span>
+        </button>
     </nav>
 
     <script src="data.js"></script>
