@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BeeHunter Bari - SuperApp</title>
+    <title>BeeHunter Bari - Official App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .page { display: none; }
@@ -13,25 +13,26 @@
         #side-menu.open { transform: translateX(0); }
         .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; }
         .overlay.active { display: block; }
+        .badge-locked { filter: grayscale(1); opacity: 0.5; }
         * { -webkit-tap-highlight-color: transparent; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900 pb-24">
+<body class="bg-gray-50 text-slate-900 pb-24 font-sans">
 
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
     
     <div id="side-menu" class="fixed top-0 left-0 h-full w-64 bg-white z-50 shadow-2xl p-6">
         <h2 class="font-black italic text-xl mb-10 text-yellow-500 uppercase">BeeHunter 🐝</h2>
-        <nav class="space-y-6 font-bold uppercase text-[10px] tracking-widest">
-            <div onclick="nav('home'); toggleMenu()" class="cursor-pointer">🏠 Home</div>
-            <div onclick="nav('partners'); toggleMenu()" class="cursor-pointer">🤝 Partner & Premi</div>
-            <div onclick="nav('pass-shop'); toggleMenu()" class="cursor-pointer">🎟️ Acquista Pass & Bici</div>
-            <div onclick="nav('my-passes'); toggleMenu()" class="cursor-pointer">🎒 I Miei Pass</div>
-            <div onclick="nav('bus-page'); toggleMenu()" class="cursor-pointer">🚌 Pullman & Percorsi</div>
+        <nav class="space-y-6 font-bold uppercase text-[10px] tracking-widest text-slate-600">
+            <div onclick="nav('home'); toggleMenu()" class="cursor-pointer hover:text-yellow-500">🏠 Home</div>
+            <div onclick="nav('partners'); toggleMenu()" class="cursor-pointer hover:text-yellow-500">🤝 Partner & Premi</div>
+            <div onclick="nav('pass-shop'); toggleMenu()" class="cursor-pointer hover:text-yellow-500">🎟️ Acquista Pass & Bici</div>
+            <div onclick="nav('my-passes'); toggleMenu()" class="cursor-pointer hover:text-yellow-500">🎒 I Miei Pass</div>
+            <div onclick="nav('bus-page'); toggleMenu()" class="cursor-pointer hover:text-yellow-500">🚌 Pullman & Percorsi</div>
         </nav>
     </div>
 
-    <header class="bg-white p-5 sticky top-0 z-30 shadow-sm flex justify-between items-center">
+    <header class="bg-white p-5 sticky top-0 z-30 shadow-sm flex justify-between items-center border-b border-gray-100">
         <button onclick="toggleMenu()" class="text-2xl">☰</button>
         <div class="text-right">
             <p class="text-[9px] font-black text-gray-400 uppercase leading-none">Punti Hunter</p>
@@ -40,77 +41,93 @@
     </header>
 
     <main id="home" class="page active p-5">
-        <div class="bg-yellow-400 p-6 rounded-[40px] text-white shadow-lg mb-6">
-            <h2 class="text-2xl font-black italic uppercase leading-none">Caccia all'Experience</h2>
-            <p class="text-xs font-bold opacity-90 mt-2">Esplora Bari, guadagna badge e sblocca premi reali.</p>
+        <div class="bg-yellow-400 p-8 rounded-[40px] text-white shadow-xl mb-8 relative overflow-hidden">
+            <h2 class="text-3xl font-black italic uppercase leading-none mb-2">Bari ti sfida!</h2>
+            <p class="text-xs font-bold opacity-90 leading-relaxed">Trova i tesori, scansiona i codici e scala la classifica dei migliori Hunter.</p>
         </div>
-        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest">Obiettivi suggeriti</h3>
+        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest border-l-4 border-yellow-400 pl-2">Sfide Attive</h3>
         <div id="home-tasks" class="space-y-3"></div>
     </main>
 
     <main id="map" class="page p-5">
         <h2 class="text-xl font-black italic uppercase mb-4">Mappa Obiettivi</h2>
-        <div class="w-full h-80 bg-slate-200 rounded-[40px] shadow-inner flex items-center justify-center relative overflow-hidden">
-            <span class="font-black text-gray-400 uppercase text-[10px] z-10">GPS Attivo 📡</span>
-        </div>
-        <div class="mt-4 grid grid-cols-2 gap-2 text-[10px] font-black uppercase text-center">
-            <div class="bg-white p-3 rounded-2xl shadow-sm border border-yellow-100">🏛️ Monumenti</div>
-            <div class="bg-white p-3 rounded-2xl shadow-sm border border-yellow-100">🍕 Food Corner</div>
+        <div class="w-full h-96 bg-slate-200 rounded-[40px] shadow-inner flex items-center justify-center relative overflow-hidden">
+            <span class="font-black text-gray-400 uppercase text-[10px] z-10">Radar Attivo 📡</span>
+            <div class="absolute top-1/2 left-1/3 bg-white p-2 rounded-full shadow-lg border-2 border-yellow-400">🍕</div>
+            <div class="absolute top-1/4 right-1/4 bg-white p-2 rounded-full shadow-lg border-2 border-blue-400">🏛️</div>
         </div>
     </main>
 
     <main id="camera" class="page p-5 text-center">
-        <h2 class="text-xl font-black italic uppercase mb-4">Obiettivo Hunter</h2>
-        <div class="w-full h-80 bg-black rounded-[40px] overflow-hidden relative border-4 border-white shadow-xl">
+        <h2 class="text-xl font-black italic uppercase mb-4">Scanner Hunter</h2>
+        <div class="w-full h-96 bg-black rounded-[40px] overflow-hidden relative border-4 border-white shadow-2xl">
             <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
         </div>
-        <div class="flex flex-col space-y-3 mt-6">
-            <button onclick="startCamera()" class="bg-yellow-400 text-white py-4 rounded-3xl font-black text-xs uppercase shadow-md">Attiva Scanner</button>
-            <button onclick="takePhoto()" class="bg-slate-900 text-white py-4 rounded-3xl font-black text-xs uppercase shadow-md">Scatta Foto & Guadagna</button>
+        <div class="flex flex-col space-y-3 mt-8">
+            <button onclick="startCamera()" class="bg-yellow-400 text-white py-5 rounded-3xl font-black text-xs uppercase shadow-lg active:scale-95 transition-transform">Attiva Camera</button>
+            <button onclick="takePhoto()" class="bg-slate-900 text-white py-5 rounded-3xl font-black text-xs uppercase shadow-lg active:scale-95 transition-transform">Scansiona & Cattura</button>
         </div>
     </main>
 
     <main id="profile" class="page p-5">
-        <h2 class="text-xl font-black italic uppercase mb-4">Mio Diario</h2>
-        <div class="bg-white p-6 rounded-[35px] shadow-sm mb-6 border-t-4 border-yellow-400">
-            <div class="flex justify-between items-end mb-2">
-                <p id="reward-text" class="text-[10px] font-black uppercase text-gray-400">Prossimo Premio</p>
-                <span class="text-[10px] font-black text-yellow-500">300 PT MAX</span>
+        <h2 class="text-xl font-black italic uppercase mb-4">Profilo Hunter</h2>
+        
+        <div class="bg-white p-6 rounded-[35px] shadow-sm mb-6 border-t-8 border-yellow-400">
+            <div class="flex justify-between items-end mb-3">
+                <p id="reward-text" class="text-[10px] font-black uppercase text-gray-400 leading-none">Status: Iniziato</p>
+                <span id="progress-val" class="text-[10px] font-black text-yellow-500">150 / 300 PT</span>
             </div>
-            <div class="w-full bg-gray-100 h-2 rounded-full">
-                <div id="progress-bar" class="bg-yellow-400 h-2 rounded-full transition-all" style="width: 50%"></div>
+            <div class="w-full bg-gray-100 h-3 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-yellow-400 h-full transition-all duration-700" style="width: 50%"></div>
             </div>
         </div>
+
+        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest border-l-4 border-yellow-400 pl-2 uppercase">I Tuoi Badge</h3>
+        <div class="grid grid-cols-3 gap-4 mb-8 text-center">
+            <div id="badge-culture" class="badge-locked flex flex-col items-center">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-2xl mb-1">🏛️</div>
+                <p class="text-[8px] font-black uppercase leading-tight">Culture<br>Badge</p>
+            </div>
+            <div id="badge-foodie" class="badge-locked flex flex-col items-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-2xl mb-1">🍕</div>
+                <p class="text-[8px] font-black uppercase leading-tight">Foodie<br>Badge</p>
+            </div>
+            <div id="badge-explorer" class="badge-locked flex flex-col items-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-2xl mb-1">🧭</div>
+                <p class="text-[8px] font-black uppercase leading-tight">Explorer<br>Badge</p>
+            </div>
+        </div>
+
+        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest border-l-4 border-yellow-400 pl-2">Foto Diario</h3>
         <div id="diary-grid" class="grid grid-cols-2 gap-2"></div>
     </main>
 
-    <main id="partners" class="page p-5">
-        <h2 class="text-xl font-black italic uppercase mb-4">Partner Convenzionati</h2>
-        <div id="partners-list" class="space-y-3"></div>
-    </main>
-
     <main id="pass-shop" class="page p-5">
-        <h2 class="text-xl font-black italic uppercase mb-4">Prenota Esperienza</h2>
-        <div id="shop-list" class="space-y-4"></div>
+        <h2 class="text-xl font-black italic uppercase mb-4">Shop Esperienze</h2>
+        <div id="shop-list" class="space-y-6"></div>
     </main>
 
     <main id="my-passes" class="page p-5">
-        <h2 class="text-xl font-black italic uppercase mb-4">I Miei Itinerari</h2>
-        <div id="purchased-list" class="space-y-4">
-            <p class="text-center text-gray-400 uppercase font-black text-[10px] mt-20">Nessun pass acquistato.</p>
+        <h2 class="text-xl font-black italic uppercase mb-4">Percorsi Sbloccati</h2>
+        <div id="purchased-list" class="space-y-6 text-center py-20">
+            <p class="text-gray-400 uppercase font-black text-[10px]">Ancora nessun itinerario sbloccato.<br>Vai allo shop per iniziare la tua caccia!</p>
         </div>
     </main>
 
     <main id="bus-page" class="page p-5">
-        <h2 class="text-xl font-black italic uppercase text-blue-600 mb-4">Trasporti AMTAB</h2>
-        <div class="bg-white p-5 rounded-[30px] shadow-sm mb-6 space-y-4">
-            <p class="text-[10px] font-black uppercase text-gray-400 italic">Cerca percorso migliore</p>
-            <input type="text" id="bus-dest" placeholder="Inserisci meta (es. San Nicola)" class="w-full p-4 bg-gray-100 rounded-2xl text-xs outline-none focus:ring-2 ring-blue-400">
-            <button onclick="findBusRoute()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase">Calcola Percorso</button>
+        <h2 class="text-xl font-black italic uppercase text-blue-600 mb-4 italic">Navigazione AMTAB</h2>
+        <div class="bg-white p-6 rounded-[35px] shadow-sm mb-6 space-y-4">
+            <input type="text" id="bus-dest" placeholder="Dove vuoi andare? (es. San Nicola)" class="w-full p-4 bg-gray-50 rounded-2xl text-xs outline-none border border-transparent focus:border-blue-300">
+            <button onclick="findBusRoute()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-[10px] uppercase shadow-md">Trova il bus migliore</button>
         </div>
         <div id="bus-result" class="mb-6"></div>
-        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-3 tracking-widest">Tutte le linee</h3>
+        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest">Linee Principali</h3>
         <div id="bus-all" class="grid grid-cols-4 gap-2"></div>
+    </main>
+
+    <main id="partners" class="page p-5">
+        <h2 class="text-xl font-black italic uppercase mb-4 text-yellow-500">Hunter Partners</h2>
+        <div id="partners-list" class="space-y-3"></div>
     </main>
 
     <nav class="fixed bottom-0 w-full bg-white border-t p-4 flex justify-around items-center z-40 shadow-2xl">
@@ -129,46 +146,48 @@
     </nav>
 
     <script>
-        // DATABASE INTERNO
         const DB = {
             points: 150,
             diary: [],
             myPasses: [],
             locations: [
-                { n: "Castello Svevo", p: 20, cat: "Culturale", desc: "Storia della fortezza normanna." },
-                { n: "Panificio Fiore", p: 15, cat: "Foodie", desc: "La vera focaccia barese." },
-                { n: "Mercato Arco Basso", p: 10, cat: "Explorer", desc: "Le signore delle orecchiette." }
-            ],
-            partners: [
-                { n: "Mastro Ciccio", d: "Sconto 15% su Panini Gourmet", icon: "🍔" },
-                { n: "Bari in Bici", d: "Sconto Noleggio Hunter", icon: "🚲" }
+                { n: "Basilica San Nicola", p: 20, cat: "Culturale", icon: "🏛️" },
+                { n: "Focaccia da Fiore", p: 15, cat: "Foodie", icon: "🍕" },
+                { n: "Lungomare Augusto", p: 10, cat: "Explorer", icon: "🧭" }
             ],
             passes: [
-                { id:'bike', n: 'Bari in Bici', price: 3, d: 'Tour in bici con tappe strategiche e micro-storie.', mete: [
-                    { t: 'Noleggio Bici', d: 'Punto di partenza per la tua caccia.', h: 'Logistica' },
-                    { t: 'Lungomare', d: 'Micro-storia sulla Muraglia e il mare.', h: 'Culturale' }
-                ]},
-                { id:'light', n: 'Light Tour', price: 5, d: '4 tappe nel cuore di Bari Vecchia. Perfetto per 1 ora.', mete: [
-                    { t: 'Basilica San Nicola', d: 'La perla del romanico pugliese.', h: 'Storica' },
-                    { t: 'Cattedrale', d: 'San Sabino e il rosone magico.', h: 'Culturale' }
-                ]}
+                { 
+                    id:'bike', n: 'Bari in Bici', price: 3, 
+                    d: 'Esplora Bari su due ruote! Questo pass include il noleggio convenzionato e un itinerario che tocca il lungomare e la Muraglia, perfetto per sbloccare il badge Explorer.', 
+                    mete: [
+                        { s: "Tappa 1", t: 'Noleggio Velo-Service', d: 'Preleva la tua bici con lo sconto Hunter.', info: 'Punto di partenza tecnico.' },
+                        { s: "Tappa 2", t: 'Lungomare Nazario Sauro', d: 'La pedana panoramica più lunga d’Italia.', info: 'Sblocca curiosità sul mare.' },
+                        { s: "Tappa 3", t: 'Molo San Nicola', d: 'Guarda il mercato del pesce fresco.', info: 'Sblocca badge Fresh Catch.' }
+                    ]
+                },
+                { 
+                    id:'light', n: 'Discovery Light', price: 5, 
+                    d: 'Il tour definitivo per chi ha poco tempo. Una guida digitale che ti porta nei 4 angoli più segreti di Bari Vecchia tra vicoli medievali e corti nascoste.', 
+                    mete: [
+                        { s: "Tappa 1", t: 'Basilica di San Nicola', d: 'Il cuore religioso di Bari.', info: 'Cerca la colonna miracolosa.' },
+                        { s: "Tappa 2", t: 'Cattedrale San Sabino', d: 'Splendido esempio di romanico pugliese.', info: 'Nota il rosone sulla facciata.' },
+                        { s: "Tappa 3", t: 'Arco delle Meraviglie', d: 'L’angolo più romantico della città.', info: 'Scatta una foto qui per il diario.' }
+                    ]
+                }
             ],
             transport: {
-                "san nicola": "Linea 12/ o Navetta A",
-                "stazione": "Tutte le linee (Piazza Moro)",
-                "fiera": "Linea 53 o 2/",
-                "pane e pomodoro": "Linea 12 o 42"
-            },
-            allBuses: ["1", "2/", "3", "12/", "22", "53", "A", "B", "CPJ"]
+                "san nicola": "Linea 12/ o Navetta A (Fermata Castello)",
+                "stazione": "Tutte le linee principali (Capolinea Piazza Moro)",
+                "fiera": "Linea 53 o 2/ (Attiva per eventi FdL)",
+                "pane e pomodoro": "Linea 12, 42 o Circolare CPJ"
+            }
         };
 
-        // LOGICA NAVIGAZIONE
         function nav(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('nav button').forEach(btn => btn.classList.replace('nav-active', 'text-gray-400'));
-            const activeBtn = document.getElementById('n-' + id);
-            if(activeBtn) activeBtn.classList.replace('text-gray-400', 'nav-active');
+            if(document.getElementById('n-' + id)) document.getElementById('n-' + id).classList.replace('text-gray-400', 'nav-active');
             if(id !== 'camera') stopCamera();
             window.scrollTo(0,0);
         }
@@ -178,52 +197,44 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // RENDERING DINAMICO
         function init() {
-            // Home tasks
             document.getElementById('home-tasks').innerHTML = DB.locations.map(loc => `
-                <div class="bg-white p-4 rounded-3xl shadow-sm flex justify-between items-center border border-gray-100">
-                    <div><p class="text-[9px] font-black text-yellow-500 uppercase">${loc.cat}</p><p class="font-black text-sm uppercase italic">${loc.n}</p></div>
-                    <span class="font-black text-xs text-green-500">+${loc.p} PT</span>
+                <div class="bg-white p-5 rounded-3xl shadow-sm flex justify-between items-center border border-gray-50">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">${loc.icon}</span>
+                        <div><p class="text-[8px] font-black text-yellow-500 uppercase">${loc.cat}</p><p class="font-black text-sm uppercase">${loc.n}</p></div>
+                    </div>
+                    <span class="bg-green-50 text-green-600 px-3 py-1 rounded-full font-black text-[10px]">+${loc.p} PT</span>
                 </div>
             `).join('');
 
-            // Partners
-            document.getElementById('partners-list').innerHTML = DB.partners.map(p => `
-                <div class="bg-white p-4 rounded-3xl shadow-sm flex items-center space-x-4">
-                    <div class="text-2xl">${p.icon}</div>
-                    <div><p class="font-black text-sm uppercase">${p.n}</p><p class="text-[10px] text-gray-400 italic">${p.d}</p></div>
-                </div>
-            `).join('');
-
-            // Shop
             document.getElementById('shop-list').innerHTML = DB.passes.map(p => `
-                <div class="bg-white p-6 rounded-[35px] shadow-sm border border-gray-100">
-                    <h3 class="font-black text-lg italic uppercase">${p.n}</h3>
-                    <p class="text-[10px] text-gray-500 my-2">${p.d}</p>
-                    <button onclick="buyPass('${p.id}')" class="w-full bg-yellow-400 text-white py-3 rounded-2xl font-black text-xs uppercase mt-2">Acquista €${p.price}</button>
+                <div class="bg-white p-6 rounded-[35px] shadow-sm border-l-8 border-yellow-400">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-black text-xl italic uppercase leading-none text-slate-800">${p.n}</h3>
+                        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-black text-xs italic">€${p.price}</span>
+                    </div>
+                    <p class="text-xs text-slate-500 my-4 leading-relaxed">${p.d}</p>
+                    <button onclick="buyPass('${p.id}')" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase shadow-lg">Sblocca Itinerario</button>
                 </div>
             `).join('');
 
-            // All Buses
-            document.getElementById('bus-all').innerHTML = DB.allBuses.map(b => `<div class="bg-gray-100 p-3 rounded-xl text-center font-black text-xs">${b}</div>`).join('');
+            document.getElementById('bus-all').innerHTML = ["1", "2/", "12/", "53", "A", "B", "CPJ", "22"].map(b => `<div class="bg-gray-100 p-3 rounded-xl text-center font-black text-xs">${b}</div>`).join('');
             
-            updatePoints();
+            updateProgress();
         }
 
-        // LOGICA BUS
         function findBusRoute() {
             const dest = document.getElementById('bus-dest').value.toLowerCase();
             const res = document.getElementById('bus-result');
-            let found = DB.transport[dest] || "Linea non trovata. Prova 'San Nicola' o 'Stazione'.";
-            res.innerHTML = `<div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 font-black text-[10px] text-blue-600 uppercase italic animate-pulse">${found}</div>`;
+            let found = DB.transport[dest] || "Destinazione non riconosciuta. Prova 'San Nicola'.";
+            res.innerHTML = `<div class="bg-blue-50 p-5 rounded-3xl border border-blue-100 font-black text-xs text-blue-600 uppercase italic animate-pulse">${found}</div>`;
         }
 
-        // ACQUISTO E I MIEI PASS
         function buyPass(id) {
             const pass = DB.passes.find(p => p.id === id);
             DB.myPasses.push(pass);
-            alert("Pass Sbloccato! Controlla 'I Miei Pass'.");
+            alert("Pass Sbloccato! Consulta l'itinerario in 'I Miei Pass'.");
             renderMyPasses();
             nav('my-passes');
         }
@@ -231,58 +242,73 @@
         function renderMyPasses() {
             const list = document.getElementById('purchased-list');
             if(DB.myPasses.length === 0) return;
+            list.className = "space-y-6 text-left";
             list.innerHTML = DB.myPasses.map(p => `
-                <div class="bg-white p-6 rounded-[35px] shadow-md border-t-8 border-yellow-400">
-                    <h3 class="font-black uppercase text-sm mb-4">${p.n} - Mete per te</h3>
-                    <div class="space-y-4">
-                        ${p.mete.map(m => `
-                            <div class="border-l-4 border-gray-100 pl-4">
-                                <p class="font-black text-xs uppercase">${m.t} <span class="text-yellow-500 font-black">[${m.h}]</span></p>
-                                <p class="text-[10px] text-gray-400 mt-1 italic">${m.d}</p>
-                            </div>
-                        `).join('')}
+                <div class="bg-white p-8 rounded-[40px] shadow-xl border-t-8 border-yellow-400">
+                    <h3 class="font-black uppercase text-sm mb-6 flex items-center"><span class="mr-2">🏁</span> ${p.n}</h3>
+                    <div class="relative">
+                        <div class="absolute left-3 top-0 bottom-0 w-1 bg-gray-100"></div>
+                        <div class="space-y-8">
+                            ${p.mete.map(m => `
+                                <div class="relative pl-10">
+                                    <div class="absolute left-1 top-1 w-5 h-5 bg-yellow-400 rounded-full border-4 border-white shadow-sm z-10"></div>
+                                    <p class="font-black text-[10px] text-yellow-500 uppercase leading-none mb-1">${m.s}</p>
+                                    <p class="font-black text-sm uppercase text-slate-800">${m.t}</p>
+                                    <p class="text-xs text-slate-500 mt-1">${m.d}</p>
+                                    <div class="mt-2 bg-gray-50 p-2 rounded-lg italic text-[10px] text-gray-400">💡 Curiosità: ${m.info}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // CAMERA & DIARIO
         let stream = null;
         async function startCamera() {
             try {
                 stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
                 document.getElementById('video').srcObject = stream;
-            } catch (err) { alert("Attiva la fotocamera!"); }
+            } catch (err) { alert("Accesso camera negato."); }
         }
 
         function stopCamera() { if(stream) { stream.getTracks().forEach(t => t.stop()); stream = null; } }
 
         function takePhoto() {
-            const video = document.getElementById('video');
             if(!stream) return alert("Attiva la camera!");
+            const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth; canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
             DB.diary.push(canvas.toDataURL('image/png'));
-            DB.points += 10;
-            updatePoints();
+            DB.points += 25; // Bonus per cattura
+            updateProgress();
             renderDiary();
-            alert("Salvata nel Diario! +10 PT");
+            checkBadges();
+            alert("Catturato! +25 PT Hunter.");
         }
 
         function renderDiary() {
-            document.getElementById('diary-grid').innerHTML = DB.diary.map(img => `<img src="${img}" class="w-full h-32 object-cover rounded-2xl shadow-sm border-2 border-white">`).join('');
+            document.getElementById('diary-grid').innerHTML = DB.diary.map(img => `<img src="${img}" class="w-full h-32 object-cover rounded-3xl shadow-sm border-2 border-white">`).join('');
         }
 
-        function updatePoints() {
+        function updateProgress() {
             document.getElementById('user-points').innerText = DB.points;
-            const progress = (DB.points / 300) * 100;
-            document.getElementById('progress-bar').style.width = progress + "%";
+            document.getElementById('progress-val').innerText = DB.points + " / 300 PT";
+            const bar = document.getElementById('progress-bar');
+            bar.style.width = Math.min((DB.points / 300) * 100, 100) + "%";
             
-            let rewardMsg = "Punta a 200 PT per il Mini-Tour!";
-            if(DB.points >= 300) rewardMsg = "Sei un BARI FOOD MASTER! 🏆";
-            else if(DB.points >= 200) rewardMsg = "Tour Gastronomico Sbloccato! 🍲";
-            document.getElementById('reward-text').innerText = rewardMsg;
+            let msg = "Status: Hunter Novizio";
+            if(DB.points >= 300) msg = "Status: Bari Food Master 🏆";
+            else if(DB.points >= 200) msg = "Status: Esploratore Esperto";
+            document.getElementById('reward-text').innerText = msg;
+        }
+
+        function checkBadges() {
+            // Logica simulata di sblocco badge in base ai punti o alle azioni
+            if(DB.points >= 170) document.getElementById('badge-foodie').classList.remove('badge-locked');
+            if(DB.points >= 200) document.getElementById('badge-explorer').classList.remove('badge-locked');
+            if(DB.points >= 250) document.getElementById('badge-culture').classList.remove('badge-locked');
         }
 
         init();
