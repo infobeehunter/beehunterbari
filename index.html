@@ -3,88 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BeeHunter Bari - Support Edition</title>
+    <title>BeeHunter Bari - Ultimate Master Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
+        /* CORE STYLES */
         .page { display: none; }
         .page.active { display: block !important; }
+        .nav-active { color: #EAB308 !important; font-weight: 800; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        * { -webkit-tap-highlight-color: transparent; outline: none; }
+        
+        /* SIDE MENU */
         #side-menu { transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
         #side-menu.open { transform: translateX(0); }
-        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 40; backdrop-filter: blur(4px); }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; backdrop-filter: blur(4px); }
         .overlay.active { display: block; }
-        .chat-bubble-support { background: #f3f4f6; border-radius: 20px 20px 20px 0px; }
-        .chat-bubble-user { background: #EAB308; color: white; border-radius: 20px 20px 0px 20px; }
-        @keyframes typing { 0% { opacity: .2; } 20% { opacity: 1; } 100% { opacity: .2; } }
+        
+        /* MAPPE */
+        #main-map, #nav-map { width: 100%; border-radius: 25px; z-index: 10; border: 4px solid white; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        #main-map { height: 250px; }
+        #nav-map { height: 350px; }
+        
+        /* UI ELEMENTS */
+        .badge-locked { filter: grayscale(1); opacity: 0.3; }
+        .ticket-cut { clip-path: polygon(10% 0, 90% 0, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0 90%, 0 10%); }
+        
+        /* CHAT */
+        .chat-bot { background: #f3f4f6; border-radius: 20px 20px 20px 0px; }
+        .chat-user { background: #EAB308; color: white; border-radius: 20px 20px 0px 20px; }
+        @keyframes typing { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
         .typing span { animation: typing 1.4s infinite; }
         .typing span:nth-child(2) { animation-delay: .2s; }
         .typing span:nth-child(3) { animation-delay: .4s; }
     </style>
 </head>
-<body class="bg-gray-50 text-slate-900 pb-20 font-sans overflow-x-hidden">
+<body class="bg-gray-50 text-slate-900 pb-24 font-sans overflow-x-hidden">
 
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
-    <div id="side-menu" class="fixed top-0 left-0 h-full w-72 bg-white z-50 shadow-2xl p-6 flex flex-col">
-        <h2 class="font-black italic text-2xl text-yellow-500 uppercase mb-8">BeeHunter 🐝</h2>
+    <div id="side-menu" class="fixed top-0 left-0 h-full w-72 bg-white z-[60] shadow-2xl p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="font-black italic text-2xl text-yellow-500 uppercase">BeeHunter 🐝</h2>
+            <button onclick="toggleMenu()" class="text-gray-400 text-2xl font-bold">✕</button>
+        </div>
         <nav class="space-y-3 flex-1 overflow-y-auto no-scrollbar">
             <button onclick="nav('home'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">🏠 Dashboard</button>
-            <button onclick="nav('partners'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">🤝 Partner Sponsor</button>
-            <button onclick="nav('support'); toggleMenu()" class="w-full text-left p-4 bg-yellow-400 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center shadow-lg">💬 Supporto Live 24h</button>
+            <button onclick="nav('partners'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">🤝 Partner Premium</button>
+            <button onclick="nav('shop'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">🎟️ Shop Esperienze</button>
+            <button onclick="nav('my-passes'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">🎒 I Miei Biglietti</button>
+            <button onclick="nav('profile'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">👤 Profilo & Diario</button>
             <div class="border-t my-4"></div>
-            <button onclick="nav('leaderboard'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">🏆 Classifica</button>
-            <button onclick="nav('diary-page'); toggleMenu()" class="w-full text-left p-4 bg-gray-50 rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center">📸 Diario Foto</button>
+            <button onclick="nav('support'); toggleMenu()" class="w-full text-left p-4 bg-yellow-400 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest flex items-center shadow-md">💬 Supporto Live 24h</button>
         </nav>
     </div>
 
-    <header class="bg-white p-4 sticky top-0 z-30 shadow-sm flex justify-between items-center">
-        <button onclick="toggleMenu()" class="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-2xl text-xl shadow-inner">☰</button>
+    <header class="bg-white/90 backdrop-blur-md p-4 sticky top-0 z-40 shadow-sm flex justify-between items-center">
+        <button onclick="toggleMenu()" class="w-12 h-12 flex items-center justify-center bg-gray-100 rounded-2xl shadow-inner text-xl">☰</button>
         <div class="text-right">
-            <p class="text-[8px] font-black text-gray-400 uppercase">Punti Totali</p>
+            <p class="text-[8px] font-black text-gray-400 uppercase">Punti Hunter</p>
             <span id="user-points" class="text-xl font-black text-yellow-400">150</span>
         </div>
     </header>
 
     <main id="home" class="page active p-5">
-        <div id="main-map" class="h-64 mb-6 rounded-[30px] border-4 border-white shadow-xl"></div>
+        <h2 class="text-lg font-black uppercase italic mb-4">Esplora Bari & Provincia</h2>
+        <div id="main-map" class="mb-6"></div>
+        <h3 class="font-black uppercase text-[10px] text-gray-400 mb-3 tracking-widest border-l-4 border-yellow-400 pl-2">Obiettivi del Giorno</h3>
         <div id="daily-tasks" class="space-y-4"></div>
     </main>
 
-    <main id="support" class="page h-[calc(100vh-100px)] flex flex-col p-5">
-        <div class="flex items-center space-x-4 mb-4">
-            <div class="relative">
-                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-xl">🐝</div>
-                <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-            </div>
-            <div>
-                <h2 class="text-sm font-black uppercase italic leading-none">Supporto Hunter</h2>
-                <p class="text-[9px] text-green-500 font-bold uppercase">Online - Risposta rapida</p>
-            </div>
+    <main id="navigation" class="page p-5">
+        <div class="flex items-center justify-between mb-4">
+            <button onclick="nav('home')" class="text-[10px] font-black uppercase text-gray-400">← Annulla Percorso</button>
+            <h2 class="text-sm font-black uppercase italic text-yellow-500">Navigazione Live</h2>
         </div>
-
-        <div id="chat-window" class="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 no-scrollbar">
-            <div class="chat-bubble-support p-4 max-w-[80%] text-[11px] font-medium shadow-sm">
-                Ciao! 🐝 Benvenuto nel supporto BeeHunter. Sono il tuo assistente 24/7. Hai qualche problema con un obiettivo o curiosità sui nostri itinerari?
+        <div id="nav-map" class="mb-6"></div>
+        <div id="nav-info" class="bg-white p-6 rounded-[35px] shadow-lg border-t-8 border-slate-900">
+            <h3 id="nav-title" class="font-black text-xl uppercase italic mb-2">Destinazione</h3>
+            <p id="nav-desc" class="text-[10px] text-gray-500 mb-4 leading-relaxed"></p>
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="bg-blue-50 p-3 rounded-2xl">
+                    <p class="text-[8px] font-black text-blue-400 uppercase">Bus da prendere</p>
+                    <p id="nav-bus" class="text-xs font-black text-blue-600 mt-1">--</p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-2xl">
+                    <p class="text-[8px] font-black text-green-400 uppercase">Consigliato vicino</p>
+                    <p id="nav-eat" class="text-[10px] font-black text-green-600 mt-1 leading-tight">--</p>
+                </div>
             </div>
-        </div>
-
-        <div id="typing-indicator" class="hidden text-[9px] font-bold text-gray-400 uppercase ml-2 mb-2 typing">
-            Il supporto sta scrivendo<span>.</span><span>.</span><span>.</span>
-        </div>
-
-        <div class="flex items-center space-x-2 bg-white p-2 rounded-[25px] shadow-lg border">
-            <input type="text" id="chat-input" placeholder="Scrivi un messaggio..." class="flex-1 bg-transparent p-3 text-xs outline-none">
-            <button onclick="sendMessage()" class="bg-yellow-400 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">></button>
+            <button onclick="nav('camera')" class="w-full bg-yellow-400 text-white py-4 rounded-2xl font-black text-[11px] uppercase shadow-md flex items-center justify-center space-x-2">
+                <span>📸</span> <span>Scansiona QR / Foto Luogo</span>
+            </button>
         </div>
     </main>
 
-    <main id="partners" class="page p-5"></main>
-    <main id="leaderboard" class="page p-5"></main>
+    <main id="camera" class="page p-5 text-center">
+        <h2 class="text-xl font-black italic uppercase mb-4">Verifica Obiettivo</h2>
+        <div class="w-full h-80 bg-black rounded-[40px] overflow-hidden relative shadow-2xl mb-6">
+            <video id="video" class="w-full h-full object-cover" autoplay playsinline></video>
+            <div class="absolute inset-0 border-[40px] border-black/40 pointer-events-none flex items-center justify-center">
+                <div class="w-32 h-32 border-2 border-dashed border-white/50"></div>
+            </div>
+        </div>
+        <p class="text-[10px] font-bold text-gray-400 uppercase mb-4">Inquadra il monumento o il QR Code</p>
+        <button onclick="captureAndClaim()" class="w-full bg-slate-900 text-white py-5 rounded-3xl font-black text-xs uppercase shadow-xl">Conferma & Riscuoti Punti</button>
+    </main>
+
+    <main id="partners" class="page p-5">
+        <h2 class="text-2xl font-black uppercase italic mb-2 leading-none">Partner Premium</h2>
+        <p class="text-[10px] text-gray-400 uppercase font-bold italic mb-6">Sconti esclusivi per gli Hunter</p>
+        <div id="partners-list" class="space-y-4"></div>
+    </main>
+    <main id="partner-detail" class="page p-5">
+        <button onclick="nav('partners')" class="mb-4 text-[10px] font-black uppercase text-gray-400">← Indietro</button>
+        <div id="p-detail-content" class="bg-white rounded-[35px] overflow-hidden shadow-xl"></div>
+    </main>
+
+    <main id="profile" class="page p-5">
+        <div id="auth-section" class="bg-white p-6 rounded-[35px] shadow-md mb-8">
+            <h3 class="font-black uppercase text-sm mb-4">Diventa un Hunter</h3>
+            <div class="space-y-3">
+                <input type="text" id="reg-name" placeholder="Nome e Cognome" class="w-full p-4 bg-gray-50 rounded-xl text-xs outline-none">
+                <input type="email" id="reg-email" placeholder="Email" class="w-full p-4 bg-gray-50 rounded-xl text-xs outline-none">
+                <input type="tel" id="reg-tel" placeholder="Cellulare" class="w-full p-4 bg-gray-50 rounded-xl text-xs outline-none">
+                <button onclick="registerUser()" class="w-full bg-yellow-400 text-white py-4 rounded-xl font-black text-xs uppercase">Registrati</button>
+            </div>
+        </div>
+
+        <div id="profile-section" class="hidden">
+            <div class="bg-white p-6 rounded-[35px] shadow-sm mb-6 text-center border-t-8 border-yellow-400">
+                <div class="relative w-24 h-24 mx-auto mb-4">
+                    <div id="p-avatar" class="w-full h-full bg-gray-200 rounded-full border-4 border-yellow-400 bg-cover bg-center"></div>
+                    <label class="absolute bottom-0 right-0 bg-slate-900 p-2 rounded-full cursor-pointer text-[10px]">
+                        📸 <input type="file" class="hidden" onchange="uploadPhoto(event)">
+                    </label>
+                </div>
+                <h3 id="p-name" class="font-black text-xl uppercase italic">Nome</h3>
+                <p id="p-city" class="text-[10px] font-bold text-gray-400 uppercase my-2">📍 Città: Non impostata</p>
+                <button onclick="editCity()" class="text-[9px] text-yellow-500 font-black uppercase underline">Modifica Info</button>
+            </div>
+
+            <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest border-l-4 border-yellow-400 pl-2">I Tuoi Badge</h3>
+            <div id="badge-grid" class="grid grid-cols-3 gap-3 mb-8"></div>
+
+            <h3 class="font-black uppercase text-[10px] text-gray-400 mb-4 tracking-widest border-l-4 border-yellow-400 pl-2">Foto Diario</h3>
+            <div id="diary-grid" class="grid grid-cols-2 gap-2"></div>
+        </div>
+    </main>
+
+    <main id="shop" class="page p-5">
+        <h2 class="text-2xl font-black uppercase italic mb-6">Acquista Pass</h2>
+        <div id="shop-list" class="space-y-4"></div>
+    </main>
+    <main id="my-passes" class="page p-5">
+        <h2 class="text-2xl font-black uppercase italic mb-6">I Miei Itinerari</h2>
+        <div id="tickets-list" class="space-y-6 text-center"><p class="text-[10px] text-gray-400 font-bold uppercase mt-10">Nessun pass acquistato.</p></div>
+    </main>
+
+    <main id="support" class="page p-5 h-[calc(100vh-80px)] flex flex-col">
+        <div class="flex items-center space-x-3 mb-6 bg-white p-4 rounded-3xl shadow-sm">
+            <div class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-lg">👨‍💻</div>
+            <div><h2 class="text-xs font-black uppercase italic">Assistenza Hunter</h2><p class="text-[8px] text-green-500 font-bold uppercase">Online 24/7</p></div>
+        </div>
+        <div id="chat-window" class="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 no-scrollbar">
+            <div class="chat-bot p-4 max-w-[85%] text-[11px] font-medium shadow-sm">
+                Ciao! 🐝 Benvenuto nel supporto BeeHunter. Sono il tuo assistente virtuale. Hai qualche problema con un percorso, con la riscossione dei punti o altre curiosità?
+            </div>
+        </div>
+        <div id="typing-indicator" class="hidden text-[9px] font-bold text-gray-400 uppercase ml-2 mb-2 typing">Il supporto sta scrivendo<span>.</span><span>.</span><span>.</span></div>
+        <div class="flex items-center space-x-2 bg-white p-2 rounded-full shadow-lg border border-gray-100">
+            <input type="text" id="chat-input" placeholder="Scrivi un messaggio..." class="flex-1 bg-transparent p-3 text-xs outline-none ml-2">
+            <button onclick="sendChat()" class="bg-yellow-400 text-white w-10 h-10 rounded-full font-bold">></button>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 w-full bg-white border-t p-3 flex justify-around items-center z-[1000] shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+        <button onclick="nav('home')" id="n-home" class="nav-active flex flex-col items-center">🏠<span class="text-[8px] font-black uppercase mt-1">Home</span></button>
+        <button onclick="nav('shop')" id="n-shop" class="text-gray-400 flex flex-col items-center">🎟️<span class="text-[8px] font-black uppercase mt-1">Shop</span></button>
+        <button onclick="nav('my-passes')" id="n-my-passes" class="text-gray-400 flex flex-col items-center">🎒<span class="text-[8px] font-black uppercase mt-1">Pass</span></button>
+        <button onclick="nav('profile')" id="n-profile" class="text-gray-400 flex flex-col items-center">👤<span class="text-[8px] font-black uppercase mt-1">Io</span></button>
+    </nav>
 
     <script>
-        const State = { points: 150 };
+        // CORE STATE & DB
+        const State = {
+            points: 150,
+            user: JSON.parse(localStorage.getItem('bh_user')) || null,
+            completedTasks: new Set(),
+            activeTarget: null, // Destinazione corrente per navigazione/camera
+            diary: [],
+            myPasses: [],
+            tasks: [
+                { id: 't1', n: 'Basilica San Nicola', pts: 50, coords: [41.1315, 16.8722], d: 'Il cuore storico. Trova il portale dei leoni.', bus: 'Navetta A (da P. Moro)', eat: 'Panificio Fiore' },
+                { id: 't2', n: 'Castel del Monte', pts: 200, coords: [41.0847, 16.2711], d: 'Provincia: il mistero ottagonale.', bus: 'Bus Extraurbano', eat: 'Agriturismo locale' }
+            ],
+            partners: [
+                { id: 'p1', n: 'Mastro Ciccio', phone: '080 1234567', coords: [41.1285, 16.8710], bus: 'Linea 12', img: 'https://images.unsplash.com/photo-1550507992-eb63ffee0847?w=600', d: 'Maestri del panino barese.', rev: ['Super consigliato!'] },
+                { id: 'p2', n: 'Panificio Fiore', phone: '080 7654321', coords: [41.1310, 16.8720], bus: 'Navetta A', img: 'https://images.unsplash.com/photo-1599321955419-78a9fd638202?w=600', d: 'Focaccia cotta nel forno medievale.', rev: [] }
+            ],
+            shop: [
+                { id: 's1', n: 'Bari Discovery Tour', price: 10, d: '7 tappe culturali guidate.', route: 'Castello -> Cattedrale -> San Nicola' },
+                { id: 's2', n: 'Lungomare Bike Pass', price: 5, d: 'Noleggio bici incluso.', route: 'Teatro Margherita -> Pane e Pomodoro' }
+            ],
+            badges: [
+                { id: 'b1', n: 'Pioniere', d: 'Primo accesso', icon: '🐝', date: '16/03/2026', locked: false },
+                { id: 'b2', n: 'Foodie', d: 'Scansiona locale', icon: '🍕', date: '-', locked: true },
+                { id: 'b3', n: 'Explorer', d: 'Esci dalla città', icon: '🧭', date: '-', locked: true }
+            ]
+        };
 
+        // UI & NAVIGATION LOGIC
         function toggleMenu() {
             document.getElementById('side-menu').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('active');
@@ -93,47 +223,260 @@
         function nav(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id === 'home') setTimeout(initMap, 100);
+            
+            // Aggiorna icone navbar (solo per i 4 tasti principali)
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.replace('nav-active', 'text-gray-400'));
+            if(document.getElementById('n-'+id)) document.getElementById('n-'+id).classList.replace('text-gray-400', 'nav-active');
+            
+            if(id === 'home') setTimeout(initHomeMap, 100);
+            if(id === 'profile') renderProfile();
             if(id === 'support') scrollChat();
+            if(id !== 'camera') stopVideo();
+            renderData();
         }
 
-        // CHAT LOGIC
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const chatWindow = document.getElementById('chat-window');
-            if(!input.value.trim()) return;
-
-            // Messaggio Utente
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chat-bubble-user p-4 max-w-[80%] text-[11px] font-medium ml-auto shadow-md';
-            userMsg.innerText = input.value;
-            chatWindow.appendChild(userMsg);
+        // RENDERING
+        function renderData() {
+            document.getElementById('user-points').innerText = State.points;
             
-            const currentMsg = input.value;
+            // Home Tasks
+            document.getElementById('daily-tasks').innerHTML = State.tasks.map(t => {
+                const done = State.completedTasks.has(t.id);
+                return `
+                <div class="bg-white p-5 rounded-[30px] shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-black text-sm uppercase ${done ? 'line-through text-gray-400' : ''}">${t.n}</h4>
+                        <span class="${done ? 'text-gray-400' : 'text-green-500'} font-black text-xs">${done ? 'FATTO' : '+'+t.pts+' PT'}</span>
+                    </div>
+                    <p class="text-[10px] text-gray-400 italic mb-4">${t.d}</p>
+                    <button onclick="startNavigation('${t.id}', 'task')" class="w-full ${done ? 'bg-gray-200 text-gray-400' : 'bg-slate-900 text-white'} py-3 rounded-xl font-black text-[10px] uppercase shadow-md" ${done ? 'disabled' : ''}>Avvia Percorso</button>
+                </div>
+                `;
+            }).join('');
+
+            // Shop
+            document.getElementById('shop-list').innerHTML = State.shop.map(s => `
+                <div class="bg-white p-6 rounded-[35px] shadow-sm border-l-8 border-yellow-400">
+                    <h4 class="font-black text-lg uppercase italic">${s.n}</h4>
+                    <p class="text-[10px] text-gray-500 my-3">${s.d}</p>
+                    <button onclick="buyPass('${s.id}')" class="w-full bg-yellow-400 text-white py-3 rounded-2xl font-black text-[10px] uppercase">Acquista €${s.price}</button>
+                </div>
+            `).join('');
+
+            // Partners
+            document.getElementById('partners-list').innerHTML = State.partners.map(p => `
+                <div onclick="openPartner('${p.id}')" class="bg-white p-4 rounded-[30px] shadow-sm flex items-center space-x-4">
+                    <img src="${p.img}" class="w-16 h-16 object-cover rounded-2xl">
+                    <div class="flex-1"><h4 class="font-black text-sm uppercase">${p.n}</h4><p class="text-[9px] text-yellow-500 font-bold uppercase mt-1">Sconto Hunter attivo</p></div>
+                </div>
+            `).join('');
+        }
+
+        // MAPPE (Leaflet)
+        let mapHome, mapNav;
+        function initHomeMap() {
+            if(mapHome) mapHome.remove();
+            mapHome = L.map('main-map').setView([41.1171, 16.8719], 11);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mapHome);
+            State.tasks.forEach(t => L.marker(t.coords).addTo(mapHome).bindPopup(t.n));
+            
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    L.circle([pos.coords.latitude, pos.coords.longitude], {radius: 200, color: '#EAB308'}).addTo(mapHome);
+                });
+            }
+        }
+
+        // AVVIO PERCORSO
+        function startNavigation(id, type) {
+            let target;
+            if(type === 'task') target = State.tasks.find(x => x.id === id);
+            if(type === 'partner') target = State.partners.find(x => x.id === id);
+            if(type === 'pass') {
+                const pass = State.myPasses.find(x => x.id === id);
+                target = { id: pass.id, n: pass.route.split('->')[0], pts: 100, coords: [41.127, 16.87], bus: 'Consulta Mappa', eat: 'Esplora zona', isPass: true };
+            }
+
+            State.activeTarget = target;
+            nav('navigation');
+
+            document.getElementById('nav-title').innerText = target.n;
+            document.getElementById('nav-desc').innerText = "Segui la mappa per arrivare a destinazione. Punti in palio!";
+            document.getElementById('nav-bus').innerText = target.bus || '--';
+            document.getElementById('nav-eat').innerText = target.eat || 'Locali in zona';
+
+            setTimeout(() => {
+                if(mapNav) mapNav.remove();
+                mapNav = L.map('nav-map').setView(target.coords, 15);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(mapNav);
+                L.marker(target.coords).addTo(mapNav).bindPopup("ARRIVO").openPopup();
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(pos => {
+                        L.circle([pos.coords.latitude, pos.coords.longitude], {radius: 50, color: 'blue'}).addTo(mapNav);
+                    });
+                }
+            }, 300);
+        }
+
+        // CAMERA E ANTI-SPAM LOGIC
+        let stream;
+        async function startVideo() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                document.getElementById('video').srcObject = stream;
+            } catch(e) { alert("Attiva la fotocamera per riscuotere i punti!"); }
+        }
+        function stopVideo() { if(stream) stream.getTracks().forEach(t => t.stop()); }
+
+        function captureAndClaim() {
+            if(!State.activeTarget) return alert("Nessun obiettivo attivo!");
+            
+            // LOGICA ANTI SPAM
+            if(State.completedTasks.has(State.activeTarget.id)) {
+                return alert("Hai già riscosso i punti per questo luogo!");
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 640; canvas.height = 480;
+            canvas.getContext('2d').drawImage(document.getElementById('video'), 0, 0);
+            
+            // Salva foto e Punti
+            State.diary.push(canvas.toDataURL());
+            if(State.activeTarget.pts) {
+                State.points += State.activeTarget.pts;
+                State.completedTasks.add(State.activeTarget.id);
+            }
+            
+            // Sblocco Badge Foodie se è un partner
+            if(State.activeTarget.phone) {
+                State.badges[1].locked = false;
+                State.badges[1].date = new Date().toLocaleDateString();
+            }
+
+            alert(`FOTO/QR ACQUISITO! +${State.activeTarget.pts || 50} PUNTI HUNTER.`);
+            nav('profile');
+        }
+
+        // PROFILO LOGIC
+        function registerUser() {
+            const nome = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            if(!nome || !email) return alert("Nome ed email obbligatori.");
+            State.user = { nome, email, city: 'Bari', avatar: '' };
+            localStorage.setItem('bh_user', JSON.stringify(State.user));
+            renderProfile();
+        }
+
+        function renderProfile() {
+            if(!State.user) {
+                document.getElementById('auth-section').style.display = 'block';
+                document.getElementById('profile-section').style.display = 'none';
+            } else {
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('profile-section').style.display = 'block';
+                document.getElementById('p-name').innerText = State.user.nome;
+                document.getElementById('p-city').innerText = `📍 Città: ${State.user.city}`;
+                if(State.user.avatar) document.getElementById('p-avatar').style.backgroundImage = `url(${State.user.avatar})`;
+                
+                // Badges
+                document.getElementById('badge-grid').innerHTML = State.badges.map(b => `
+                    <div onclick="alert('${b.n}\\n${b.d}\\nSbloccato: ${b.date}')" class="bg-white p-3 rounded-2xl text-center shadow-sm ${b.locked ? 'badge-locked' : 'border border-yellow-300'}">
+                        <span class="text-2xl">${b.icon}</span><p class="text-[8px] font-black uppercase mt-1">${b.n}</p>
+                    </div>`).join('');
+                
+                // Diario
+                document.getElementById('diary-grid').innerHTML = State.diary.map(img => `<img src="${img}" class="w-full h-32 object-cover rounded-2xl shadow-sm">`).join('');
+            }
+        }
+
+        function uploadPhoto(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                State.user.avatar = reader.result;
+                localStorage.setItem('bh_user', JSON.stringify(State.user));
+                renderProfile();
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function editCity() {
+            const city = prompt("Inserisci la tua città di provenienza:");
+            if(city) { State.user.city = city; localStorage.setItem('bh_user', JSON.stringify(State.user)); renderProfile(); }
+        }
+
+        // PASS & PARTNERS
+        function buyPass(id) {
+            const pass = State.shop.find(x => x.id === id);
+            State.myPasses.push(pass);
+            alert("Acquisto completato! Lo trovi ne 'I Miei Biglietti'.");
+            renderTickets();
+            nav('my-passes');
+        }
+
+        function renderTickets() {
+            if(State.myPasses.length === 0) return;
+            document.getElementById('tickets-list').innerHTML = State.myPasses.map(p => `
+                <div class="bg-white p-6 ticket-cut shadow-xl border border-gray-100 text-left">
+                    <h4 class="text-xl font-black uppercase italic">${p.n}</h4>
+                    <p class="text-[10px] text-gray-500 my-3">ITINERARIO: ${p.route}</p>
+                    <button onclick="startNavigation('${p.id}', 'pass')" class="w-full bg-slate-900 text-white py-3 rounded-xl font-black text-[10px] uppercase">Inizia Tour</button>
+                </div>
+            `).join('');
+        }
+
+        function openPartner(id) {
+            const p = State.partners.find(x => x.id === id);
+            document.getElementById('p-detail-content').innerHTML = `
+                <img src="${p.img}" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-black uppercase italic">${p.n}</h3>
+                    <p class="text-[10px] text-gray-500 my-4">${p.d}</p>
+                    <div class="flex space-x-2 mb-6">
+                        <a href="tel:${p.phone}" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-black text-[9px] uppercase text-center">Prenota Tavolo</a>
+                        <button onclick="startNavigation('${p.id}', 'partner')" class="flex-1 bg-yellow-400 text-white py-3 rounded-xl font-black text-[9px] uppercase">Come Arrivare</button>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl">
+                        <h4 class="text-[9px] font-black uppercase mb-2">Recensioni (Scrivi per +10 PT)</h4>
+                        ${p.rev.map(r => `<p class="text-[9px] italic mb-1 border-b pb-1">"${r}"</p>`).join('')}
+                        <input type="text" id="rev-${p.id}" placeholder="Scrivi una recensione..." class="w-full mt-2 p-2 text-[9px] outline-none rounded-md">
+                        <button onclick="sendReview('${p.id}')" class="text-[8px] font-black text-yellow-500 mt-2 uppercase">Pubblica</button>
+                    </div>
+                </div>
+            `;
+            nav('partner-detail');
+        }
+
+        function sendReview(id) {
+            const val = document.getElementById(`rev-${id}`).value;
+            if(!val) return;
+            State.partners.find(x => x.id === id).rev.push(val);
+            State.points += 10;
+            alert("Recensione pubblicata! +10 PT");
+            openPartner(id); // Ricarica
+        }
+
+        // SUPPORTO LIVE CHAT
+        function sendChat() {
+            const input = document.getElementById('chat-input');
+            const val = input.value.trim();
+            if(!val) return;
+
+            const win = document.getElementById('chat-window');
+            win.innerHTML += `<div class="chat-user p-4 max-w-[85%] text-[11px] font-medium ml-auto shadow-md">${val}</div>`;
             input.value = '';
             scrollChat();
 
-            // Simulazione Risposta Supporto
+            document.getElementById('typing-indicator').classList.remove('hidden');
+            
             setTimeout(() => {
-                document.getElementById('typing-indicator').classList.remove('hidden');
-                scrollChat();
+                document.getElementById('typing-indicator').classList.add('hidden');
+                let reply = "Un operatore prenderà in carico la tua richiesta a breve. Rimani in questa schermata.";
+                if(val.toLowerCase().includes('punti')) reply = "Per riscuotere i punti devi cliccare su 'Avvia Percorso' e poi sul tasto 'Scansiona' una volta arrivato sul posto!";
+                if(val.toLowerCase().includes('pass')) reply = "I pass acquistati si trovano nel menu laterale alla voce 'I Miei Biglietti'.";
                 
-                setTimeout(() => {
-                    document.getElementById('typing-indicator').classList.add('hidden');
-                    const supportMsg = document.createElement('div');
-                    supportMsg.className = 'chat-bubble-support p-4 max-w-[80%] text-[11px] font-medium shadow-sm';
-                    
-                    // Risposte Intelligenti Simulate
-                    if(currentMsg.toLowerCase().includes('punti')) {
-                        supportMsg.innerText = "Per ricevere i punti devi assicurarti di essere vicino al marker e scattare una foto nitida tramite lo scanner!";
-                    } else {
-                        supportMsg.innerText = "Ricevuto! Un operatore umano prenderà in carico la tua richiesta in meno di 2 minuti. Resta in linea.";
-                    }
-                    
-                    chatWindow.appendChild(supportMsg);
-                    scrollChat();
-                }, 2000);
-            }, 800);
+                win.innerHTML += `<div class="chat-bot p-4 max-w-[85%] text-[11px] font-medium shadow-sm">${reply}</div>`;
+                scrollChat();
+            }, 1500);
         }
 
         function scrollChat() {
@@ -141,14 +484,8 @@
             win.scrollTop = win.scrollHeight;
         }
 
-        // MAP LOGIC
-        function initMap() {
-            const map = L.map('main-map').setView([41.1171, 16.8719], 12);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map);
-            L.marker([41.1315, 16.8722]).addTo(map).bindPopup("Basilica San Nicola");
-        }
-
-        window.onload = () => nav('home');
+        // INIT
+        window.onload = () => { nav('home'); renderTickets(); };
     </script>
 </body>
 </html>
